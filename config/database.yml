@@ -58,8 +58,6 @@ production:
   primary: &primary_production
     <<: *default
     database: art_clip_production
-    username: art_clip
-    password: <%= ENV["ART_CLIP_DATABASE_PASSWORD"] %>
   cache:
     <<: *primary_production
     database: art_clip_production_cache
