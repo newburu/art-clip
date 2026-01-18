@@ -60,6 +60,42 @@ namespace :deploy do
 end
 
 namespace :debug do
+  desc "Check DB tables via Rails runner"
+  task :check_db_tables do
+    on roles(:app) do
+      # Find latest release explicitly
+      releases = capture(:ls, "-1 #{releases_path}").split.sort
+      if releases.empty?
+        error "No releases found."
+        exit 1
+      end
+
+      latest_release = releases.last
+      target_path = releases_path.join(latest_release)
+      info "Using latest release: #{target_path}"
+
+      within target_path do
+        with rails_env: fetch(:rails_env) do
+          ruby_script = <<~RUBY
+            begin
+              require 'active_record'
+              ActiveRecord::Base.establish_connection
+              puts "Tables: \#{ActiveRecord::Base.connection.tables.join(', ')}"
+              puts "Migrations: \#{ActiveRecord::SchemaMigration.all_versions.join(', ') rescue 'Failed to get migrations'}"
+            rescue => e
+              puts "FAILURE: \#{e.message}"
+            end
+          RUBY
+
+          upload! StringIO.new(ruby_script), "#{target_path}/db_tables_check.rb"
+          execute :bundle, :exec, :rails, "runner", "#{target_path}/db_tables_check.rb"
+        end
+      end
+    end
+  end
+end
+
+namespace :debug do
   desc "Check DB connection via Rails runner"
   task :check_db_connection do
     on roles(:app) do
