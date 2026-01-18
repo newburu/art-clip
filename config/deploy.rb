@@ -217,41 +217,54 @@ namespace :debug do
 end
 
 namespace :puma do
-  desc "Start Puma manually"
-  task :manual_start do
+  desc "Setup systemd user service"
+  task :setup_systemd do
     on roles(:app) do
-      within current_path do
-        with rails_env: fetch(:rails_env) do
-          info "Starting Puma..."
-          execute :bundle, :exec, :puma, "-C config/puma.rb", "-d"
-        end
-      end
+      # Service definition
+      service_content = <<~SERVICE
+        [Unit]
+        Description=Puma HTTP Server for art-clip (production)
+        After=network.target
+
+        [Service]
+        Type=simple
+        WorkingDirectory=#{current_path}
+        Environment=RAILS_ENV=production
+        Environment=PIDFILE=#{shared_path}/tmp/pids/puma.pid
+        ExecStart=#{fetch(:rbenv_path)}/bin/rbenv exec bundle exec puma -C config/puma.rb
+        Restart=always
+        RestartSec=1
+        StandardOutput=append:#{shared_path}/log/puma.access.log
+        StandardError=append:#{shared_path}/log/puma.error.log
+
+        [Install]
+        WantedBy=default.target
+      SERVICE
+
+      # Create directory and upload service file
+      execute :mkdir, "-p", ".config/systemd/user"
+      upload! StringIO.new(service_content), ".config/systemd/user/art-clip_puma_production.service"
+
+      # Reload and enable
+      execute :systemctl, "--user", "daemon-reload"
+      execute :systemctl, "--user", "enable", "art-clip_puma_production"
+      info "Systemd service installed and enabled."
     end
   end
 
-  desc "Stop Puma manually"
-  task :manual_stop do
+  desc "Restart Puma (Systemd --user)"
+  task :restart do
     on roles(:app) do
-      info "Stopping Puma..."
-      execute "pkill -u rails -f puma || echo 'Puma not running'"
-      execute "rm -f #{shared_path}/tmp/pids/puma.pid"
-      execute "rm -f #{shared_path}/tmp/sockets/puma.sock"
+      execute :systemctl, "--user", "restart", "art-clip_puma_production"
     end
   end
 
-  desc "Restart Puma manually"
-  task :manual_restart do
+  desc "Status Puma (Systemd --user)"
+  task :status do
     on roles(:app) do
-      if test "ps aux | grep puma | grep -v grep | grep -v bash"
-        info "Puma is running. Restarting..."
-        invoke "puma:manual_stop"
-        invoke "puma:manual_start"
-      else
-        info "Puma is not running. Starting..."
-        invoke "puma:manual_start"
-      end
+      execute :systemctl, "--user", "status", "art-clip_puma_production"
     end
   end
 end
 
-after "deploy:published", "puma:manual_restart"
+after "deploy:published", "puma:restart"
