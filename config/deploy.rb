@@ -63,24 +63,39 @@ namespace :debug do
   desc "Check DB connection via Rails runner"
   task :check_db_connection do
     on roles(:app) do
-      within release_path do
+      # Find latest release explicitly to avoid using 'current' symlink which might not exist
+      releases = capture(:ls, "-1 #{releases_path}").split.sort
+      if releases.empty?
+        error "No releases found. Please run 'cap production deploy' at least once."
+        exit 1
+      end
+
+      latest_release = releases.last
+      target_path = releases_path.join(latest_release)
+      info "Using latest release for debugging: #{target_path}"
+
+      within target_path do
         with rails_env: fetch(:rails_env) do
-          # Use a heredoc for the ruby script to avoid quoting hell
           ruby_script = <<~RUBY
             begin
+              require 'active_record'
+              puts "Environment: \#{Rails.env}"
+            #{'  '}
+              config = ActiveRecord::Base.connection_db_config.configuration_hash
+              puts "Database Config Host: \#{config[:host]}"
+              puts "Database Config User: \#{config[:username]}"
+            #{'  '}
               ActiveRecord::Base.establish_connection
               ActiveRecord::Base.connection.active?
               puts "SUCCESS: Connected to database!"
             rescue => e
               puts "FAILURE: \#{e.message}"
+              puts "Backtrace: \#{e.backtrace.first}"
             end
           RUBY
 
-          # Upload script to a temp file
-          upload! StringIO.new(ruby_script), "#{release_path}/db_check.rb"
-
-          # Run it
-          execute :bundle, :exec, :rails, "runner", "#{release_path}/db_check.rb"
+          upload! StringIO.new(ruby_script), "#{target_path}/db_check.rb"
+          execute :bundle, :exec, :rails, "runner", "#{target_path}/db_check.rb"
         end
       end
     end
