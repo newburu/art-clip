@@ -46,7 +46,6 @@ namespace :deploy do
   before :check, :upload_config
 
   desc "Create database"
-  desc "Create database"
   task :db_create do
     on roles(:db) do |host|
       with rails_env: fetch(:rails_env) do
@@ -61,26 +60,28 @@ namespace :deploy do
 end
 
 namespace :debug do
-  desc "Check revision and DB config in latest release"
-  task :check_revision do
+  desc "Check DB connection via Rails runner"
+  task :check_db_connection do
     on roles(:app) do
-      # Find latest release
-      releases = capture(:ls, "-1 #{releases_path}").split.sort
-      if releases.any?
-        latest = releases.last
-        path = releases_path.join(latest)
-        info "Inspecting release: #{latest}"
+      within release_path do
+        with rails_env: fetch(:rails_env) do
+          # Use a heredoc for the ruby script to avoid quoting hell
+          ruby_script = <<~RUBY
+            begin
+              ActiveRecord::Base.establish_connection
+              ActiveRecord::Base.connection.active?
+              puts "SUCCESS: Connected to database!"
+            rescue => e
+              puts "FAILURE: \#{e.message}"
+            end
+          RUBY
 
-        execute :echo, "--- REVISION ---"
-        execute :cat, "#{path}/REVISION" rescue info("No REVISION file")
+          # Upload script to a temp file
+          upload! StringIO.new(ruby_script), "#{release_path}/db_check.rb"
 
-        execute :echo, "--- config/database.yml ---"
-        execute :cat, "#{path}/config/database.yml"
-
-        execute :echo, "--- shared/.env HEAD ---"
-        execute :head, "-n 5", "#{shared_path}/.env"
-      else
-        error "No releases found"
+          # Run it
+          execute :bundle, :exec, :rails, "runner", "#{release_path}/db_check.rb"
+        end
       end
     end
   end
