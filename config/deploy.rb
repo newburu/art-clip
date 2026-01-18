@@ -59,3 +59,29 @@ namespace :deploy do
 
   before "deploy:migrate", "deploy:db_create"
 end
+
+namespace :debug do
+  desc "Check revision and DB config in latest release"
+  task :check_revision do
+    on roles(:app) do
+      # Find latest release
+      releases = capture(:ls, "-1 #{releases_path}").split.sort
+      if releases.any?
+        latest = releases.last
+        path = releases_path.join(latest)
+        info "Inspecting release: #{latest}"
+
+        execute :echo, "--- REVISION ---"
+        execute :cat, "#{path}/REVISION" rescue info("No REVISION file")
+
+        execute :echo, "--- config/database.yml ---"
+        execute :cat, "#{path}/config/database.yml"
+
+        execute :echo, "--- shared/.env HEAD ---"
+        execute :head, "-n 5", "#{shared_path}/.env"
+      else
+        error "No releases found"
+      end
+    end
+  end
+end
