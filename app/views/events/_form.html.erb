@@ -1,0 +1,62 @@
+<%= form_with(model: event, class: "contents", data: { controller: "ogp-fetcher" }) do |form| %>
+  <% if event.errors.any? %>
+    <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-md mt-3">
+      <h2><%= pluralize(event.errors.count, "error") %> prohibited this event from being saved:</h2>
+
+      <ul class="list-disc ml-6">
+        <% event.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="my-5">
+    <%= form.label :url, "URL (Enter to auto-fetch info)" %>
+    <div class="flex gap-2">
+      <%= form.text_field :url, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": event.errors[:url].none?, "border-red-400 focus:outline-red-600": event.errors[:url].any?}], data: { ogp_fetcher_target: "url" } %>
+      <button type="button" data-action="ogp-fetcher#fetch" class="mt-2 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Get Info</button>
+    </div>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :title %>
+    <%= form.text_field :title, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": event.errors[:title].none?, "border-red-400 focus:outline-red-600": event.errors[:title].any?}], data: { ogp_fetcher_target: "title" } %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :image_url %>
+    <div class="flex flex-col gap-2">
+      <%= form.text_field :image_url, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": event.errors[:image_url].none?, "border-red-400 focus:outline-red-600": event.errors[:image_url].any?}], data: { ogp_fetcher_target: "image" } %>
+    </div>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :start_date %>
+    <%= form.datetime_field :start_date, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": event.errors[:start_date].none?, "border-red-400 focus:outline-red-600": event.errors[:start_date].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :end_date %>
+    <%= form.datetime_field :end_date, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": event.errors[:end_date].none?, "border-red-400 focus:outline-red-600": event.errors[:end_date].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :location %>
+    <%= form.text_field :location, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": event.errors[:location].none?, "border-red-400 focus:outline-red-600": event.errors[:location].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :memo %>
+    <%= form.textarea :memo, rows: 4, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": event.errors[:memo].none?, "border-red-400 focus:outline-red-600": event.errors[:memo].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :status %>
+    <%= form.number_field :status, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": event.errors[:status].none?, "border-red-400 focus:outline-red-600": event.errors[:status].any?}] %>
+  </div>
+
+  <div class="inline">
+    <%= form.submit class: "w-full sm:w-auto rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white inline-block font-medium cursor-pointer" %>
+  </div>
+<% end %>

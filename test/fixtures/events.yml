@@ -1,0 +1,23 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: MyString
+  url: MyText
+  description: MyText
+  image_url: MyString
+  start_date: 2026-01-18 13:43:11
+  end_date: 2026-01-18 13:43:11
+  location: MyString
+  memo: MyText
+  status: 1
+
+two:
+  title: MyString
+  url: MyText
+  description: MyText
+  image_url: MyString
+  start_date: 2026-01-18 13:43:11
+  end_date: 2026-01-18 13:43:11
+  location: MyString
+  memo: MyText
+  status: 1

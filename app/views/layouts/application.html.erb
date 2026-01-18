@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || "Art Clip" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Art Clip">
+    <meta name="mobile-web-app-capable" content="yes">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= yield :head %>
+
+    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
+    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
+
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+
+    <%# Includes all stylesheet files in app/assets/stylesheets %>
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body class="bg-gray-50 text-gray-900">
+    <header class="bg-white shadow">
+      <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 flex justify-between items-center">
+        <%= link_to "Art Clip", root_path, class: "text-3xl font-bold tracking-tight text-gray-900 no-underline" %>
+        <div class="flex items-center gap-4">
+          <% if logged_in? %>
+            <div class="flex items-center gap-2">
+              <% if current_user.image %>
+                <%= image_tag current_user.image, class: "h-8 w-8 rounded-full" %>
+              <% end %>
+              <span class="hidden sm:inline font-medium text-gray-700"><%= current_user.name %></span>
+            </div>
+            <%= button_to "Sign out", signout_path, method: :delete, class: "text-sm text-gray-500 hover:text-gray-700 font-medium" %>
+          <% else %>
+            <%= button_to "Sign in with Google", "/auth/google_oauth2", method: :post, data: { turbo: false }, class: "rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500" %>
+          <% end %>
+        </div>
+      </div>
+    </header>
+    <main class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+      <%= yield %>
+    </main>
+  </body>
+</html>
