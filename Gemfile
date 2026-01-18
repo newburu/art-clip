@@ -70,10 +70,7 @@ end
 gem "metainspector", "~> 5.0"
 gem "omniauth-google-oauth2"
 gem "omniauth-rails_csrf_protection"
-
-group :development, :test do
-  gem "dotenv-rails"
-end
+gem "dotenv-rails"
 
 group :development do
   gem "capistrano"
