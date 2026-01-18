@@ -60,6 +60,15 @@ namespace :deploy do
 end
 
 namespace :debug do
+  desc "List files in shared/log"
+  task :logs do
+    on roles(:app) do
+      execute :ls, "-la", "#{shared_path}/log"
+    end
+  end
+end
+
+namespace :debug do
   desc "Check DB tables via Rails runner"
   task :check_db_tables do
     on roles(:app) do
@@ -134,6 +143,75 @@ namespace :debug do
           execute :bundle, :exec, :rails, "runner", "#{target_path}/db_check.rb"
         end
       end
+    end
+  end
+end
+
+namespace :debug do
+  desc "Force kill rogue puma processes"
+  task :reset_puma do
+    on roles(:app) do
+      info "Killing rogue puma processes (hidamari_log)..."
+      # Kill specifically the process found running from the wrong directory
+      execute "pkill -f 'hidamari_log' || echo 'No hidamari_log processes found'"
+      execute "kill -9 464547 || echo 'Process 464547 already dead'"
+
+      info "Killing any art-clip puma..."
+      execute "pkill -u rails -f art-clip || echo 'No art-clip puma found'"
+
+      info "Cleaning up pid/socket files..."
+      execute "rm -f #{shared_path}/tmp/pids/puma.pid"
+      execute "rm -f #{shared_path}/tmp/pids/puma.state"
+      execute "rm -f #{shared_path}/tmp/sockets/puma.sock"
+    end
+  end
+
+  desc "Check server status (processes, sockets)"
+  task :status do
+    on roles(:app) do
+      info "--- Process Check (Puma) ---"
+      execute "ps aux | grep puma || echo 'Puma not running'"
+
+      info "--- Socket Check & Permissions ---"
+      execute "ls -la #{shared_path}/tmp/sockets/ || echo 'No sockets found'"
+      execute "ls -ld #{shared_path}/tmp/sockets/"
+      execute "ls -ld #{shared_path}/"
+
+      info "--- Curl Check (Localhost) ---"
+      execute "curl -I --unix-socket #{shared_path}/tmp/sockets/puma.sock http://localhost || echo 'Curl failed'"
+    end
+  end
+
+  desc "Deep inspect Puma process"
+  task :inspect_process do
+    on roles(:app) do
+      # Get PID of the puma process (excluding grep itself)
+      pids = capture("ps aux | grep puma | grep -v grep | awk '{print $2}'").split
+
+      if pids.empty?
+        info "No puma process found."
+      else
+        pids.each do |pid|
+          info "--- Inspecting Puma PID: #{pid} ---"
+          execute "ps -p #{pid} -o pid,user,lstart,args"
+          # Try to check CWD (works on Linux)
+          execute "ls -l /proc/#{pid}/cwd || echo 'Cannot check CWD'"
+          # Check full cmdline
+          execute "cat /proc/#{pid}/cmdline | tr '\\0' ' ' || echo 'Cannot read cmdline'"
+          info "-----------------------------------"
+        end
+      end
+    end
+  end
+
+  desc "Check used puma config"
+  task :puma_config_check do
+    on roles(:app) do
+      info "--- Running Puma Process Args ---"
+      execute "ps aux | grep puma | grep -v grep | awk '{for(i=11;i<=NF;++i)printf $i\" \"}'"
+
+      info "--- Content of shared/puma.rb ---"
+      execute "cat #{shared_path}/puma.rb || echo 'shared/puma.rb not found'"
     end
   end
 end
