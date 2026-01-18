@@ -215,3 +215,43 @@ namespace :debug do
     end
   end
 end
+
+namespace :puma do
+  desc "Start Puma manually"
+  task :manual_start do
+    on roles(:app) do
+      within current_path do
+        with rails_env: fetch(:rails_env) do
+          info "Starting Puma..."
+          execute :bundle, :exec, :puma, "-C config/puma.rb", "-d"
+        end
+      end
+    end
+  end
+
+  desc "Stop Puma manually"
+  task :manual_stop do
+    on roles(:app) do
+      info "Stopping Puma..."
+      execute "pkill -u rails -f puma || echo 'Puma not running'"
+      execute "rm -f #{shared_path}/tmp/pids/puma.pid"
+      execute "rm -f #{shared_path}/tmp/sockets/puma.sock"
+    end
+  end
+
+  desc "Restart Puma manually"
+  task :manual_restart do
+    on roles(:app) do
+      if test "ps aux | grep puma | grep -v grep | grep -v bash"
+        info "Puma is running. Restarting..."
+        invoke "puma:manual_stop"
+        invoke "puma:manual_start"
+      else
+        info "Puma is not running. Starting..."
+        invoke "puma:manual_start"
+      end
+    end
+  end
+end
+
+after "deploy:published", "puma:manual_restart"
