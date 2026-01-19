@@ -1,0 +1,62 @@
+ja:
+  activerecord:
+    models:
+      event: "イベント"
+      user: "ユーザー"
+    attributes:
+      event:
+        title: "タイトル"
+        url: "URL"
+        description: "説明"
+        image_url: "画像URL"
+        start_date: "開始日時"
+        end_date: "終了日時"
+        location: "場所"
+        memo: "メモ"
+        status: "ステータス"
+  
+  views:
+    common:
+      app_name: "Art Clip"
+      sign_in_google: "Googleでログイン"
+      sign_out: "ログアウト"
+      new_event: "イベント作成"
+      edit_event: "イベント編集"
+      add_event: "イベントを追加"
+      get_info: "情報を取得"
+      auto_fetch_hint: "(URLを入力して情報取得)"
+      back: "戻る"
+      show: "詳細"
+      edit: "編集"
+      delete: "削除"
+      confirm: "本当によろしいですか？"
+      save: "保存"
+    events:
+      new:
+        title: "新規イベント"
+      edit:
+        title: "イベント編集"
+      show:
+        description: "説明"
+        memo: "メモ"
+        visit_website: "公式サイトへ"
+        add_to_calendar: "カレンダーに追加"
+        status: "ステータス"
+        date: "日時"
+        location: "場所"
+        tbd: "未定"
+      index:
+        title: "イベント一覧"
+        no_events: "イベントがありません"
+        no_events_desc: "美術館や展覧会のイベントを追加して管理しましょう。"
+        hero_title: "Art Clip"
+        hero_slogan: "行きたい美術館・展覧会をクリップ"
+        hero_desc: "URLを保存してステータスを管理。カレンダーと同期も。"
+  
+  flash:
+    require_login: "ログインしてください"
+    signed_in: "ログインしました"
+    signed_out: "ログアウトしました"
+    created: "%{model}を作成しました"
+    updated: "%{model}を更新しました"
+    destroyed: "%{model}を削除しました"

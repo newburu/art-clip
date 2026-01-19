@@ -12,6 +12,6 @@ class ApplicationController < ActionController::Base
   end
 
   def authenticate_user!
-    redirect_to root_path, alert: "Please sign in first" unless logged_in?
+    redirect_to root_path, alert: t("flash.require_login") unless logged_in?
   end
 end
