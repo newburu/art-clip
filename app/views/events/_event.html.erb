@@ -1,4 +1,4 @@
-<div id="<%= dom_id event %>" class="break-inside-avoid relative group rounded-lg border border-gray-200 bg-white shadow-sm hover:shadow-md transition overflow-hidden">
+<div id="<%= dom_id event %>" class="break-inside-avoid relative group rounded-lg border border-gray-200 bg-white shadow-sm hover:shadow-lg transform transition duration-300 hover:-translate-y-2 overflow-hidden">
   <%= link_to event, class: "block no-underline" do %>
     <% if event.image_url.present? %>
        <%= image_tag event.image_url, class: "w-full h-auto object-cover", loading: "lazy", alt: event.title %>
