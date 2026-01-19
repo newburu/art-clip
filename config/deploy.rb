@@ -231,7 +231,7 @@ namespace :puma do
         WorkingDirectory=#{current_path}
         Environment=RAILS_ENV=production
         Environment=PIDFILE=#{shared_path}/tmp/pids/puma.pid
-        ExecStart=#{fetch(:rbenv_path)}/bin/rbenv exec bundle exec puma -C config/puma.rb
+        ExecStart=/home/rails/.rbenv/bin/rbenv exec bundle exec puma -C config/puma.rb
         Restart=always
         RestartSec=1
         StandardOutput=append:#{shared_path}/log/puma.access.log
