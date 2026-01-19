@@ -14,6 +14,10 @@ ja:
         location: "場所"
         memo: "メモ"
         status: "ステータス"
+        statuses:
+          interested: "興味あり"
+          going: "参加予定"
+          went: "参加済み"
   
   views:
     common:

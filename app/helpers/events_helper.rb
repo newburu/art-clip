@@ -11,7 +11,7 @@ module EventsHelper
       "bg-gray-100 text-gray-800"
     end
 
-    tag.span t("events.status.#{status}", default: status&.titleize || "Unknown"), class: "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium #{color_classes}"
+    tag.span t("activerecord.attributes.event.statuses.#{status}", default: status&.titleize || "Unknown"), class: "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium #{color_classes}"
   end
 
   def google_calendar_url(event)
