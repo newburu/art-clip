@@ -39,11 +39,19 @@
              %>
              
              <div class="<%= base_classes %> <%= style_classes %>" title="<%= event.title %>">
-                <%= link_to event, class: "block w-full h-full px-1" do %>
-                  <% if is_scheduled %>
-                     <span class="mr-1 text-yellow-600">★</span>
+                <%= link_to event, class: "block w-full h-full px-1 flex items-center" do %>
+                   <% if is_scheduled %>
+                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-3 h-3 mr-1 text-yellow-600 flex-shrink-0">
+                       <path fill-rule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z" clip-rule="evenodd" />
+                     </svg>
+                  <% elsif is_start %>
+                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-3 h-3 mr-1 text-blue-500 flex-shrink-0">
+                       <path fill-rule="evenodd" d="M5.75 2a.75.75 0 01.75.75V4h7V2.75a.75.75 0 011.5 0V4h.25A2.75 2.75 0 0118 6.75v8.5A2.75 2.75 0 0115.25 18H4.75A2.75 2.75 0 012 15.25v-8.5A2.75 2.75 0 014.75 4h.25V2.75A.75.75 0 015.75 2zm-1 5.5c-.69 0-1.25.56-1.25 1.25v6.5c0 .69.56 1.25 1.25 1.25h10.5c.69 0 1.25-.56 1.25-1.25v-6.5c0-.69-.56-1.25-1.25-1.25H4.75z" clip-rule="evenodd" />
+                     </svg>
                   <% end %>
-                  <%= event.title if is_start || date.wday == 0 || is_scheduled %>
+                  <span class="truncate">
+                    <%= event.title if is_start || date.wday == 0 || is_scheduled %>
+                  </span>
                 <% end %>
              </div>
         <% end %>
