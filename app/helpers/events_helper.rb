@@ -15,12 +15,20 @@ module EventsHelper
   end
 
   def google_calendar_url(event)
-    return unless event.start_date && event.end_date
+    if event.scheduled_date
+      start_time = event.scheduled_date
+      end_time = start_time + 2.hours
+    elsif event.start_date && event.end_date
+      start_time = event.start_date
+      end_time = event.end_date
+    else
+      return
+    end
 
     base_url = "https://www.google.com/calendar/render?action=TEMPLATE"
     params = {
       text: event.title,
-      dates: "#{event.start_date.utc.strftime('%Y%m%dT%H%M%SZ')}/#{event.end_date.utc.strftime('%Y%m%dT%H%M%SZ')}",
+      dates: "#{start_time.utc.strftime('%Y%m%dT%H%M%SZ')}/#{end_time.utc.strftime('%Y%m%dT%H%M%SZ')}",
       details: "#{event.url}\n\n#{event.description}",
       location: event.location
     }

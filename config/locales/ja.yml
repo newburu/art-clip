@@ -14,6 +14,7 @@ ja:
         location: "場所"
         memo: "メモ"
         status: "ステータス"
+        scheduled_date: "参加予定日"
         statuses:
           interested: "興味あり"
           going: "参加予定"

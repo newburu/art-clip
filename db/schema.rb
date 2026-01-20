@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_18_044919) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_20_132202) do
   create_table "events", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.text "description"
@@ -18,6 +18,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_18_044919) do
     t.string "image_url"
     t.string "location"
     t.text "memo"
+    t.datetime "scheduled_date"
     t.datetime "start_date"
     t.integer "status"
     t.string "title"
