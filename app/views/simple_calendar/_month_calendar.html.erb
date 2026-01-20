@@ -1,0 +1,53 @@
+<div class="simple-calendar">
+  <div class="flex items-center justify-between mb-4">
+    <h2 class="text-xl font-bold text-gray-900">
+      <%= t('date.month_names')[start_date.month] %> <%= start_date.year %>
+    </h2>
+
+    <div class="flex items-center gap-2">
+      <%= link_to t('simple_calendar.previous', default: 'Previous'), calendar.url_for_previous_view, class: "rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50" %>
+      <%= link_to t('simple_calendar.today', default: 'Today'), calendar.url_for_today_view, class: "rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50" %>
+      <%= link_to t('simple_calendar.next', default: 'Next'), calendar.url_for_next_view, class: "rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50" %>
+    </div>
+  </div>
+
+  <div class="border border-gray-200 rounded-lg overflow-hidden flex flex-col">
+    <!-- Header -->
+    <div class="grid grid-cols-7 bg-gray-50 border-b border-gray-200">
+      <% date_range.slice(0, 7).each do |day| %>
+        <div class="py-2 text-center text-xs font-semibold uppercase tracking-wide <%= day.sunday? ? 'text-red-500' : (day.saturday? ? 'text-blue-500' : 'text-gray-500') %>">
+          <%= t('date.abbr_day_names')[day.wday] %>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Body -->
+    <div class="grid grid-cols-7 bg-white">
+      <% date_range.each do |day| %>
+         <% 
+           cell_classes = "min-h-[120px] border-b border-r border-gray-100 relative group"
+           
+           # Background Colors Logic
+           is_outside_month = day.month != start_date.month
+
+           if is_outside_month
+             cell_classes += " bg-gray-100"
+           elsif day.sunday?
+             cell_classes += " bg-red-50/50"
+           elsif day.saturday?
+             cell_classes += " bg-blue-50/50"
+           end
+
+           cell_classes += " bg-blue-50/30 ring-1 ring-inset ring-blue-200" if day == Date.current # Highlight today styling
+           cell_classes += " last-col" 
+         %>
+         <div class="<%= cell_classes %>">
+           <div class="p-2 text-right">
+             <span class="text-xs font-semibold <%= is_outside_month ? 'text-gray-400' : (day.sunday? ? 'text-red-500' : (day.saturday? ? 'text-blue-500' : 'text-gray-900')) %> <%= 'text-blue-700 font-bold' if day == Date.current %>"><%= day.day %></span>
+           </div>
+           <% instance_exec(day, calendar.sorted_events_for(day), &passed_block) %>
+         </div>
+      <% end %>
+    </div>
+  </div>
+</div>

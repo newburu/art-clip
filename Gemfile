@@ -81,3 +81,5 @@ gem "rails-i18n", "~> 8.1"
 
 gem "capistrano-rbenv", "~> 2.2", group: :development
 gem "capistrano3-puma", "~> 7.1", group: :development
+
+gem "simple_calendar", "~> 3.1"

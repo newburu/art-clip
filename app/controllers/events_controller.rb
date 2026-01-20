@@ -23,6 +23,10 @@ class EventsController < ApplicationController
     end
   end
 
+  def calendar
+    @events = current_user.events
+  end
+
   # GET /events/1 or /events/1.json
   def show
   end

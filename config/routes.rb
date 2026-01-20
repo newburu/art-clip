@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   resources :events do
     collection do
       get :fetch_ogp
+      get :calendar
     end
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

@@ -1,4 +1,10 @@
 ja:
+  simple_calendar:
+    previous: "前月"
+    next: "翌月"
+    today: "今日"
+    week: "週"
+    month: "月"
   activerecord:
     models:
       event: "イベント"
@@ -50,6 +56,10 @@ ja:
         date: "日時"
         location: "場所"
         tbd: "未定"
+      calendar:
+        title: "カレンダー"
+        period: "開催期間"
+        scheduled: "参加予定日"
       index:
         title: "イベント一覧"
         no_events: "イベントがありません"

@@ -6,7 +6,10 @@
   <% if logged_in? %>
     <div class="flex justify-between items-center mb-6">
       <h1 class="font-bold text-3xl text-gray-800"><%= t("views.events.index.title") %></h1>
-      <%= link_to t("views.common.new_event"), new_event_path, class: "rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" %>
+      <div class="flex gap-3">
+        <%= link_to t("views.events.calendar.title"), calendar_events_path, class: "rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50" %>
+        <%= link_to t("views.common.new_event"), new_event_path, class: "rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" %>
+      </div>
     </div>
 
     <% if @events.any? %>
