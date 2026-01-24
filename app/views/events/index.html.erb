@@ -24,13 +24,92 @@
       </div>
     <% end %>
   <% else %>
-    <div class="text-center py-20">
-      <h1 class="text-5xl font-bold tracking-tight text-gray-900 mb-6"><%= t("views.events.index.hero_title") %></h1>
-      <p class="text-xl text-gray-600 mb-10 max-w-2xl mx-auto">
-        <%= t("views.events.index.hero_slogan") %><br>
-        <%= t("views.events.index.hero_desc") %>
-      </p>
-      <%= button_to t("views.common.sign_in_google"), "/auth/google_oauth2", method: :post, data: { turbo: false }, class: "rounded-md bg-indigo-600 px-6 py-3 text-lg font-semibold text-white shadow-sm hover:bg-indigo-500 inline-block" %>
+    <div class="relative isolate overflow-hidden">
+      <%# Hero Section %>
+      <div class="mx-auto max-w-7xl px-6 pb-24 pt-10 sm:pb-32 lg:flex lg:px-8 lg:py-40">
+        <div class="mx-auto max-w-2xl lg:mx-0 lg:max-w-xl lg:flex-shrink-0 lg:pt-8">
+          <%= image_tag "/icon.png", class: "h-24 w-24 mb-8 invert-0" %>
+          <div class="mt-24 sm:mt-32 lg:mt-16">
+            <a href="#" class="inline-flex space-x-6">
+              <span class="rounded-full bg-indigo-600/10 px-3 py-1 text-sm font-semibold leading-6 text-indigo-600 ring-1 ring-inset ring-indigo-600/10">New</span>
+              <span class="inline-flex items-center space-x-2 text-sm font-medium leading-6 text-gray-600">
+                <span>Version 1.0 Release</span>
+              </span>
+            </a>
+          </div>
+          <h1 class="mt-10 text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl text-pretty whitespace-pre-wrap"><%= t("views.common.welcome.hero.title") %></h1>
+          <p class="mt-6 text-lg leading-8 text-gray-600 whitespace-pre-wrap"><%= t("views.common.welcome.hero.subtitle") %></p>
+          <div class="mt-10 flex items-center gap-x-6">
+            <%= button_to t("views.common.welcome.hero.cta"), "/auth/google_oauth2", method: :post, data: { turbo: false }, class: "rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" %>
+          </div>
+        </div>
+        <div class="mx-auto mt-16 flex max-w-2xl sm:mt-24 lg:ml-10 lg:mt-0 lg:mr-0 lg:max-w-none lg:flex-none xl:ml-32">
+          <div class="max-w-3xl flex-none sm:max-w-5xl lg:max-w-none">
+            <div class="-m-2 rounded-xl bg-gray-900/5 p-2 ring-1 ring-inset ring-gray-900/10 lg:-m-4 lg:rounded-2xl lg:p-4">
+              <!-- Screenshot placeholder or abstract art -->
+              <%= image_tag "/hero_dashboard.png", alt: "App Dashboard", class: "w-[24rem] sm:w-[50rem] rounded-md shadow-2xl ring-1 ring-gray-900/10" %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <%# Feature Section %>
+      <div class="mx-auto max-w-7xl px-6 lg:px-8 py-24 sm:py-32 bg-white">
+        <div class="mx-auto max-w-2xl lg:text-center">
+          <h2 class="text-base font-semibold leading-7 text-indigo-600">Features</h2>
+          <p class="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl"><%= t("views.common.app_name") %>のできること</p>
+        </div>
+        <div class="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
+          <dl class="grid max-w-xl grid-cols-1 gap-x-8 gap-y-16 lg:max-w-none lg:grid-cols-3">
+            <div class="flex flex-col">
+              <dt class="flex items-center gap-x-3 text-base font-semibold leading-7 text-gray-900">
+                <div class="h-10 w-10 flex items-center justify-center rounded-lg bg-indigo-600">
+                  <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244" />
+                  </svg>
+                </div>
+                <%= t("views.common.welcome.features.clip.title") %>
+              </dt>
+              <dd class="mt-4 flex flex-auto flex-col text-base leading-7 text-gray-600">
+                <p class="flex-auto"><%= t("views.common.welcome.features.clip.desc") %></p>
+              </dd>
+            </div>
+            <div class="flex flex-col">
+              <dt class="flex items-center gap-x-3 text-base font-semibold leading-7 text-gray-900">
+                <div class="h-10 w-10 flex items-center justify-center rounded-lg bg-indigo-600">
+                  <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <%= t("views.common.welcome.features.manage.title") %>
+              </dt>
+              <dd class="mt-4 flex flex-auto flex-col text-base leading-7 text-gray-600">
+                <p class="flex-auto"><%= t("views.common.welcome.features.manage.desc") %></p>
+              </dd>
+            </div>
+            <div class="flex flex-col">
+              <dt class="flex items-center gap-x-3 text-base font-semibold leading-7 text-gray-900">
+                <div class="h-10 w-10 flex items-center justify-center rounded-lg bg-indigo-600">
+                  <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+                  </svg>
+                </div>
+                <%= t("views.common.welcome.features.calendar.title") %>
+              </dt>
+              <dd class="mt-4 flex flex-auto flex-col text-base leading-7 text-gray-600">
+                <p class="flex-auto"><%= t("views.common.welcome.features.calendar.desc") %></p>
+              </dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+      
+      <%# Footer %>
+      <footer class="bg-white">
+        <div class="mx-auto max-w-7xl overflow-hidden px-6 py-20 sm:py-24 lg:px-8">
+          <p class="text-center text-xs leading-5 text-gray-500">&copy; <%= Time.current.year %> <%= t("views.common.app_name") %>. All rights reserved.</p>
+        </div>
+      </footer>
     </div>
   <% end %>
 </div>
