@@ -21,6 +21,22 @@
     <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
+
+    <%# Google Analytics %>
+    <% if ENV["GOOGLE_ANALYTICS_ID"].present? %>
+      <script async src="https://www.googletagmanager.com/gtag/js?id=<%= ENV["GOOGLE_ANALYTICS_ID"] %>"></script>
+      <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', '<%= ENV["GOOGLE_ANALYTICS_ID"] %>');
+      </script>
+    <% end %>
+
+    <%# Google AdSense %>
+    <% if ENV["GOOGLE_ADSENSE_ID"].present? %>
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=<%= ENV["GOOGLE_ADSENSE_ID"] %>" crossorigin="anonymous"></script>
+    <% end %>
   </head>
 
   <body class="bg-gray-50 text-gray-900">
