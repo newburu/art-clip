@@ -5,6 +5,13 @@ ja:
     today: "今日"
     week: "週"
     month: "月"
+  errors:
+    template:
+      header:
+        one: "%{model}にエラーが発生しました。"
+        other: "%{model}に%{count}個のエラーが発生しました。"
+      body: "以下の項目を確認してください："
+
   activerecord:
     models:
       event: "イベント"

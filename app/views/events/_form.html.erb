@@ -1,10 +1,16 @@
 <%= form_with(model: event, class: "contents", data: { controller: "ogp-fetcher" }) do |form| %>
   <% if event.errors.any? %>
     <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-md mt-3">
-      <h2><%= pluralize(event.errors.count, "error") %> prohibited this event from being saved:</h2>
+      <h2><%= t("errors.template.header", model: event.model_name.human, count: event.errors.count) %></h2>
 
       <ul class="list-disc ml-6">
-        <% event.errors.each do |error| %>
+        <% 
+           # Define order to match the form fields
+           field_order = [:url, :title, :image_url, :start_date, :end_date, :location, :memo, :status, :scheduled_date]
+           # Sort errors: fields in list come first in order, others (like :base) come last
+           sorted_errors = event.errors.sort_by { |error| field_order.index(error.attribute) || 999 }
+        %>
+        <% sorted_errors.each do |error| %>
           <li><%= error.full_message %></li>
         <% end %>
       </ul>
