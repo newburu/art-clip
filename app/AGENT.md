@@ -45,6 +45,8 @@
 * デプロイパスは、.envのDEPLOY_PATH
 * デプロイユーザーは、.envのDEPLOY_USER
 * Secret Key Baseは、.envのSECRET_KEY_BASE
+* サーバ上ではpumaで起動させる
+* .envをサーバ上にコピーするCapistranoタスクを作成する
 
 ## 補足事項
 * プロジェクトディレクトリは今のディレクトリをそのまま利用する
