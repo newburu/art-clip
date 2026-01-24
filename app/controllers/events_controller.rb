@@ -18,6 +18,10 @@ class EventsController < ApplicationController
   def index
     if logged_in?
       @events = current_user.events.order(end_date: :asc)
+      if params[:q].present?
+        query = "%#{ActiveRecord::Base.sanitize_sql_like(params[:q])}%"
+        @events = @events.where("title LIKE ? OR description LIKE ? OR location LIKE ?", query, query, query)
+      end
     else
       @events = []
     end

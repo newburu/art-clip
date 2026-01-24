@@ -38,6 +38,7 @@ ja:
       app_name: "Art Clip"
       sign_in_google: "Googleでログイン"
       sign_out: "ログアウト"
+      search: "イベントを検索..."
       new_event: "イベント作成"
       edit_event: "イベント編集"
       add_event: "イベントを追加"
