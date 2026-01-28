@@ -9,4 +9,10 @@ class SessionsController < ApplicationController
     session[:user_id] = nil
     redirect_to root_path, notice: t("flash.signed_out")
   end
+
+  def guest_login
+    user = User.guest
+    session[:user_id] = user.id
+    redirect_to root_path, notice: t("flash.signed_in")
+  end
 end

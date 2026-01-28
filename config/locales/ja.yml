@@ -37,6 +37,7 @@ ja:
     common:
       app_name: "Art Clip"
       sign_in_google: "Googleでログイン"
+      guest_login: "ゲストログイン"
       sign_out: "ログアウト"
       search: "イベントを検索..."
       new_event: "イベント作成"

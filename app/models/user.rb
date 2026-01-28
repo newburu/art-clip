@@ -8,4 +8,12 @@ class User < ApplicationRecord
       user.image = auth.info.image
     end
   end
+  def self.guest
+    find_or_create_by!(email: "guest@example.com") do |user|
+      user.name = "ゲストユーザー"
+      user.provider = "guest"
+      user.uid = "guest_uid"
+      user.image = "/icon.png"
+    end
+  end
 end
