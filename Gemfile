@@ -67,7 +67,7 @@ group :test do
   gem "selenium-webdriver"
 end
 
-gem "metainspector", "~> 5.0"
+gem "metainspector", "~> 5.17"
 gem "omniauth-google-oauth2"
 gem "omniauth-rails_csrf_protection"
 gem "dotenv-rails", require: "dotenv/load"
